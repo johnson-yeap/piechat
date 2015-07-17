@@ -125,20 +125,21 @@ var SampleApp = function() {
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
         }
+        
+        // view engine setup
+        self.app.set('views', path.join(__dirname, 'views'));
+        self.app.set('view engine', 'ejs');
+
+        // uncomment after placing your favicon in /public
+        // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+        self.app.use(logger('dev'));
+        self.app.use(bodyParser.json());
+        self.app.use(bodyParser.urlencoded({ extended: false }));
+        self.app.use(cookieParser());
+        self.app.use(express.static(path.join(__dirname, 'public')));
     };
 
-            // view engine setup
-            self.app.set('views', path.join(__dirname, 'views'));
-            self.app.set('view engine', 'ejs');
-
-            // uncomment after placing your favicon in /public
-            // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-            self.app.use(logger('dev'));
-            self.app.use(bodyParser.json());
-            self.app.use(bodyParser.urlencoded({ extended: false }));
-            self.app.use(cookieParser());
-            self.app.use(express.static(path.join(__dirname, 'public')));
-
+           
 
     /**
      *  Initializes the sample application.
