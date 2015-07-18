@@ -40,7 +40,7 @@
 				};
 
 				try {
-					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000');
+					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
 				} catch(e) {
 					// Set status to warn user
 					console.log("Socket.io connection failed");
