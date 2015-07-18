@@ -23,8 +23,6 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     process.env.OPENSHIFT_APP_NAME;
 }
 
-
-console.log(process.env.OPENSHIFT_MONGODB_DB_USERNAME);
 /**
  *  Define the sample application.
  */
@@ -156,7 +154,6 @@ var SampleApp = function() {
     };
     
 
-
     /**
      *  Create the routing table entries + handlers for the application.
      */
@@ -211,7 +208,6 @@ var SampleApp = function() {
     };
 
 
-
     /**
      *  Initializes the sample application.
      */
@@ -241,11 +237,9 @@ var SampleApp = function() {
 };   /*  Sample Application.  */
 
 
-
 /**
  *  main():  Main code.
  */
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
-
