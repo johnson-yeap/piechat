@@ -187,11 +187,6 @@ var SampleApp = function() {
             self.app.get(r, self.routes[r]);
         }
 
-        self.server = http.createServer(self.app);
-        self.client = io.listen(self.server);
-
-        self.server.listen(process.env.OPENSHIFT_NODEJS_PORT, process.env.OPENSHIFT_NODEJS_IP);
-
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
         self.app.set('view engine', 'ejs');
@@ -207,6 +202,17 @@ var SampleApp = function() {
 
     
     /**
+     *  socket.io Initialization
+     */
+
+    self.initializeSocketIO = function() {
+        self.server = http.createServer(self.app);
+        self.client = io.listen(self.server);
+    };
+
+
+
+    /**
      *  Initializes the sample application.
      */
     self.initialize = function() {
@@ -216,6 +222,7 @@ var SampleApp = function() {
 
         // Create the express server and routes.
         self.initializeServer();
+        self.initializeSocketIO();
     };
 
 
