@@ -10,6 +10,10 @@ var bodyParser      = require('body-parser');
 var mongoClient     = require('mongodb').MongoClient;
 var http            = require('http');
 var io              = require('socket.io');
+
+var app             = express();
+var server          = require('http').createServer(app);
+var client          = require('socket.io').listen(server);
     
 // MongoDB connection string
 // default to a 'localhost' configuration:
@@ -111,45 +115,45 @@ var SampleApp = function() {
     /**
      *  Establish mongodb connection
      */
-    mongoClient.connect(connection_string, function(err, db) {
-        if(err) throw err;
-        client.on('connection', function(socket) {
-            var col = db.collection('messages'),
-            sendStatus = function(s) {
-                socket.emit('status', s);
-            };
+    // mongoClient.connect(connection_string, function(err, db) {
+    //     if(err) throw err;
+    //     client.on('connection', function(socket) {
+    //         var col = db.collection('messages'),
+    //         sendStatus = function(s) {
+    //             socket.emit('status', s);
+    //         };
 
-            // Emit all messages
-            col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
-                if(err) throw err;
+    //         // Emit all messages
+    //         col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
+    //             if(err) throw err;
 
-                socket.emit('output', res);
-            });
+    //             socket.emit('output', res);
+    //         });
 
-            // Wait for input
-            socket.on('input', function(data) {
-                var name = data.name,
-                    message = data.message,
-                    whitespacePattern = /^\s*$/;
+    //         // Wait for input
+    //         socket.on('input', function(data) {
+    //             var name = data.name,
+    //                 message = data.message,
+    //                 whitespacePattern = /^\s*$/;
 
-                if(whitespacePattern.test(name) || whitespacePattern.test(message)) {
-                    sendStatus('Name and message is required.');
-                } else {
-                    col.insert({name: name, message: message}, function() {
+    //             if(whitespacePattern.test(name) || whitespacePattern.test(message)) {
+    //                 sendStatus('Name and message is required.');
+    //             } else {
+    //                 col.insert({name: name, message: message}, function() {
                   
-                        // Emit latest message to all clients
-                        // Use client.emit instead of socket.emit
-                        client.emit('output', [data]);
+    //                     // Emit latest message to all clients
+    //                     // Use client.emit instead of socket.emit
+    //                     client.emit('output', [data]);
 
-                        sendStatus({
-                            message: "Message sent",
-                            clear: true
-                        });
-                    });
-                }
-            });
-        });
-    }); 
+    //                     sendStatus({
+    //                         message: "Message sent",
+    //                         clear: true
+    //                     });
+    //                 });
+    //             }
+    //         });
+    //     });
+    // }); 
 
 
     /**
@@ -185,7 +189,7 @@ var SampleApp = function() {
 
         self.server = http.createServer(self.app);
         self.client = io.listen(self.server);
-        
+
         self.server.listen(process.env.OPENSHIFT_NODEJS_PORT, process.env.OPENSHIFT_NODEJS_IP);
 
         // view engine setup
