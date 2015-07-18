@@ -8,10 +8,8 @@ var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var mongoClient     = require('mongodb').MongoClient;
-
-var app             = express();
-var server          = require('http').createServer(app);
-var client          = require('socket.io').listen(server);
+var http            = require('http');
+var io              = require('socket.io');
     
 // MongoDB connection string
 // default to a 'localhost' configuration:
@@ -185,8 +183,9 @@ var SampleApp = function() {
             self.app.get(r, self.routes[r]);
         }
 
-        self.server = require('http').createServer(self.app);
-        self.client = require('socket.io').listen(self.server);
+        self.server = http.createServer(self.app);
+        self.client = io.listen(self.server);
+        
         self.server.listen(process.env.OPENSHIFT_NODEJS_PORT, process.env.OPENSHIFT_NODEJS_IP);
 
         // view engine setup
