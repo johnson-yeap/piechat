@@ -14,13 +14,12 @@ var io              = require('socket.io');
 var app             = express();
 var server          = require('http').createServer(app);
 var client          = require('socket.io').listen(server);
-    
-// MongoDB connection string
-// default to a 'localhost' configuration:
-var connection_string = "mongodb://127.0.0.1:27017/piechat";
-// if OPENSHIFT env variables are present, use the available connection info:
+
+// Default to a 'localhost' configuration:
+var mongodb_connection_string = "mongodb://127.0.0.1:27017/piechat";
+// If OPENSHIFT env variables are present, use the available connection info:
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-    connection_string = "mongodb://" + process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+    mongodb_connection_string = "mongodb://" + process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
     process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
     process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
     process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
@@ -115,7 +114,7 @@ var SampleApp = function() {
     /**
      *  Establish mongodb connection
      */
-    // mongoClient.connect(connection_string, function(err, db) {
+    // mongoClient.connect(mongodb_connection_string, function(err, db) {
     //     if(err) throw err;
     //     client.on('connection', function(socket) {
     //         var col = db.collection('messages'),
@@ -207,7 +206,7 @@ var SampleApp = function() {
 
     self.initializeSocketIO = function() {
         self.server = http.createServer(self.app);
-        self.client = io.listen(self.server);
+        self.client = io.listen(self.server).sockets;
     };
 
 
