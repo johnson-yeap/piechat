@@ -10,8 +10,8 @@ var bodyParser      = require('body-parser');
 var mongoClient     = require('mongodb').MongoClient;
 
 var server          = require('http').createServer(express);
-var client          = require('socket.io').listen(server).sockets;
-
+var client          = require('socket.io').listen(server);
+    
 // MongoDB connection string
 // default to a 'localhost' configuration:
 var connection_string = "mongodb://127.0.0.1:27017/piechat";
