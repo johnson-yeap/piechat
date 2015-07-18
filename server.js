@@ -187,6 +187,7 @@ var SampleApp = function() {
 
         self.server = require('http').createServer(self.app);
         self.client = require('socket.io').listen(self.server);
+        self.server.listen(process.env.OPENSHIFT_NODEJS_PORT, process.env.OPENSHIFT_NODEJS_IP);
 
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
