@@ -48,3 +48,10 @@ input {
 .chat-name {
 	outline: none;
 }
+
+.signature {
+	position: fixed;
+	width: 100%;
+	padding: 10px;
+	bottom: 0;
+}
