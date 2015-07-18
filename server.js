@@ -7,8 +7,22 @@ var favicon         = require('serve-favicon');
 var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
+var mongoClient     = require('mongodb').MongoClient;
 
+var server          = require('http').createServer(express);
+var client          = require('socket.io').listen(server).sockets;
 
+// MongoDB connection string
+// default to a 'localhost' configuration:
+var connection_string = "mongodb://127.0.0.1:27017/piechat";
+// if OPENSHIFT env variables are present, use the available connection info:
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+    process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+    process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+    process.env.OPENSHIFT_APP_NAME;
+}
 
 /**
  *  Define the sample application.
@@ -96,6 +110,50 @@ var SampleApp = function() {
     /*  ================================================================  */
 
     /**
+     *  Establish mongodb connection
+     */
+    mongoClient.connect(connection_string, function(err, db) {
+        if(err) throw err;
+        client.on('connection', function(socket) {
+            var col = db.collection('messages'),
+            sendStatus = function(s) {
+                socket.emit('status', s);
+            };
+
+            // Emit all messages
+            col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
+                if(err) throw err;
+
+                socket.emit('output', res);
+            });
+
+            // Wait for input
+            socket.on('input', function(data) {
+                var name = data.name,
+                    message = data.message,
+                    whitespacePattern = /^\s*$/;
+
+                if(whitespacePattern.test(name) || whitespacePattern.test(message)) {
+                    sendStatus('Name and message is required.');
+                } else {
+                    col.insert({name: name, message: message}, function() {
+                  
+                        // Emit latest message to all clients
+                        // Use client.emit instead of socket.emit
+                        client.emit('output', [data]);
+
+                        sendStatus({
+                            message: "Message sent",
+                            clear: true
+                        });
+                    });
+                }
+            });
+        });
+    }); 
+
+
+    /**
      *  Create the routing table entries + handlers for the application.
      */
     self.createRoutes = function() {
@@ -125,7 +183,7 @@ var SampleApp = function() {
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
         }
-        
+
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
         self.app.set('view engine', 'ejs');
@@ -139,8 +197,7 @@ var SampleApp = function() {
         self.app.use(express.static(path.join(__dirname, 'public')));
     };
 
-           
-
+    
     /**
      *  Initializes the sample application.
      */
