@@ -11,9 +11,6 @@ var mongoClient     = require('mongodb').MongoClient;
 var http            = require('http');
 var io              = require('socket.io');
 
-var app             = express();
-var server          = require('http').createServer(app);
-var client          = require('socket.io').listen(server);
 
 // Default to a 'localhost' configuration:
 var mongodb_connection_string = "mongodb://127.0.0.1:27017/piechat";
@@ -114,45 +111,48 @@ var SampleApp = function() {
     /**
      *  Establish mongodb connection
      */
-    // mongoClient.connect(mongodb_connection_string, function(err, db) {
-    //     if(err) throw err;
-    //     client.on('connection', function(socket) {
-    //         var col = db.collection('messages'),
-    //         sendStatus = function(s) {
-    //             socket.emit('status', s);
-    //         };
+    self.connectMongoDB = function() {
+        mongoClient.connect(mongodb_connection_string, function(err, db) {
+            if(err) throw err;
+            self.client.on('connection', function(socket) {
+                var col = db.collection('messages'),
+                sendStatus = function(s) {
+                    socket.emit('status', s);
+                };
 
-    //         // Emit all messages
-    //         col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
-    //             if(err) throw err;
+                // Emit all messages
+                col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
+                    if(err) throw err;
 
-    //             socket.emit('output', res);
-    //         });
+                    socket.emit('output', res);
+                });
 
-    //         // Wait for input
-    //         socket.on('input', function(data) {
-    //             var name = data.name,
-    //                 message = data.message,
-    //                 whitespacePattern = /^\s*$/;
+                // Wait for input
+                socket.on('input', function(data) {
+                    var name = data.name,
+                        message = data.message,
+                        whitespacePattern = /^\s*$/;
 
-    //             if(whitespacePattern.test(name) || whitespacePattern.test(message)) {
-    //                 sendStatus('Name and message is required.');
-    //             } else {
-    //                 col.insert({name: name, message: message}, function() {
-                  
-    //                     // Emit latest message to all clients
-    //                     // Use client.emit instead of socket.emit
-    //                     client.emit('output', [data]);
+                    if(whitespacePattern.test(name) || whitespacePattern.test(message)) {
+                        sendStatus('Name and message is required.');
+                    } else {
+                        col.insert({name: name, message: message}, function() {
+                      
+                            // Emit latest message to all clients
+                            // Use client.emit instead of socket.emit
+                            self.client.emit('output', [data]);
 
-    //                     sendStatus({
-    //                         message: "Message sent",
-    //                         clear: true
-    //                     });
-    //                 });
-    //             }
-    //         });
-    //     });
-    // }); 
+                            sendStatus({
+                                message: "Message sent",
+                                clear: true
+                            });
+                        });
+                    }
+                });
+            });
+        }); 
+    };
+    
 
 
     /**
@@ -203,7 +203,6 @@ var SampleApp = function() {
     /**
      *  socket.io Initialization
      */
-
     self.initializeSocketIO = function() {
         self.server = http.createServer(self.app);
         self.client = io.listen(self.server).sockets;
@@ -222,6 +221,7 @@ var SampleApp = function() {
         // Create the express server and routes.
         self.initializeServer();
         self.initializeSocketIO();
+        self.connectMongoDB();
     };
 
 
