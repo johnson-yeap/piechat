@@ -9,6 +9,7 @@ var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var mongoClient     = require('mongodb').MongoClient;
 
+var app             = express();
 var server          = require('http').createServer(app);
 var client          = require('socket.io').listen(server);
     
