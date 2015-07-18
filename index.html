@@ -12,7 +12,7 @@
 			<div class="chat-status">Status: <span>Idle</span></div>
 		</div>
 
-		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 
 		<script>
 			(function() {
@@ -40,7 +40,7 @@
 				};
 
 				try {
-					var socket = io();
+					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
 				} catch(e) {
 					// Set status to warn user
 					console.log("Socket.io connection failed");

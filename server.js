@@ -196,9 +196,6 @@ var SampleApp = function() {
         self.app.use(bodyParser.urlencoded({ extended: false }));
         self.app.use(cookieParser());
         self.app.use(express.static(path.join(__dirname, 'public')));
-
-        self.server          = require('http').createServer(self.app);
-        self.client          = require('socket.io').listen(self.server);
     };
 
     
