@@ -224,8 +224,6 @@ var SampleApp = function() {
             console.log('%s: Node server started on %s:%d ...',
                         Date(Date.now() ), self.ipaddress, self.port);
         });
-
-        self.client = require('socket.io').listen(self.app);
     };
 
 };   /*  Sample Application.  */
@@ -237,5 +235,5 @@ var SampleApp = function() {
  */
 var zapp = new SampleApp();
 zapp.initialize();
-zapp.start();
+// zapp.start();
 
