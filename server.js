@@ -9,8 +9,9 @@ var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var mongoClient     = require('mongodb').MongoClient;
 
-var server          = require('http').createServer(express);
-var client          = require('socket.io').listen(server);
+var app             = express();
+var server          = require('http').createServer(app);
+var client          = require('socket.io').listen(server).sockets;
     
 // MongoDB connection string
 // default to a 'localhost' configuration:
