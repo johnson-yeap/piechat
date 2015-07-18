@@ -185,6 +185,9 @@ var SampleApp = function() {
             self.app.get(r, self.routes[r]);
         }
 
+        self.server = require('http').createServer(self.app);
+        self.client = require('socket.io').listen(self.server);
+
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
         self.app.set('view engine', 'ejs');
