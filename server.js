@@ -23,6 +23,8 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     process.env.OPENSHIFT_APP_NAME;
 }
 
+
+console.log(process.env.OPENSHIFT_MONGODB_DB_USERNAME);
 /**
  *  Define the sample application.
  */
