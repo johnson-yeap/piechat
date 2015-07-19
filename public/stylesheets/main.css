@@ -6,6 +6,8 @@ input {
 
 .chat {
 	max-width: 300px;
+	margin: auto;
+	margin-top: 50px;
 }
 
 .chat-messages,
