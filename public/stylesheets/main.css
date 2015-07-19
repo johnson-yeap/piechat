@@ -23,6 +23,7 @@ input {
 
 .chat-message {
 	margin-bottom: 10px;
+	word-wrap: break-word;
 }
 
 .chat-name {
