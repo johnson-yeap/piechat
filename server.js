@@ -114,12 +114,13 @@ var SampleApp = function() {
     self.connectMongoDB = function() {
         mongoClient.connect(mongodb_connection_string, function(err, db) {
             if(err) throw err;
+            console.log('Database connnected');
+            
             self.client.on('connection', function(socket) {
                 var col = db.collection('messages'),
                 sendStatus = function(s) {
                     socket.emit('status', s);
                 };
-
                 // Emit all messages
                 col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
                     if(err) throw err;
