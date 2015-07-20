@@ -7,16 +7,42 @@
 		<meta property="og:site_name" content="Red Hat Cloud" />
 		<meta property="og:url" content="http://piechat-coaedi.rhcloud.com/" />
 		<meta property="og:description" content="A real time chat application." />
+		<meta property="og:image" content="http://piechat-coaedi.rhcloud.com/images/meet_your_neighbor.png" />
+		<meta property="fb:app_id" content="469932953183949" />
 		<meta property="og:type" content="website" />
 		<meta property="og:locale" content="en_US" />  
 	</head>
 	<body>
-		<section class="chat">
+		<script>
+		  window.fbAsyncInit = function() {
+		    FB.init({
+		      appId      : '469932953183949',
+		      xfbml      : true,
+		      version    : 'v2.4'
+		    });
+		  };
+
+		  (function(d, s, id){
+		     var js, fjs = d.getElementsByTagName(s)[0];
+		     if (d.getElementById(id)) {return;}
+		     js = d.createElement(s); js.id = id;
+		     js.src = "//connect.facebook.net/en_US/sdk.js";
+		     fjs.parentNode.insertBefore(js, fjs);
+		   }(document, 'script', 'facebook-jssdk'));
+		</script>
+
+		<div
+  			class="fb-like"
+  			data-share="true"
+  			data-width="450"
+  			data-show-faces="true">
+		</div>
+		<div class="chat">
 			<input type="text" class="chat-name" placeholder="Enter your name">
 			<div class="chat-messages"></div>
 			<textarea placeholder="Type your message"></textarea>
 			<div class="chat-status">Status: <span>Zzz...</span></div>
-		</section>
+		</div>
 
 		<div class="signature">
 			&copy; sponavitus
