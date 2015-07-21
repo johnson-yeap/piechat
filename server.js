@@ -117,6 +117,8 @@ var SampleApp = function() {
             console.log('Database connnected');
             
             self.client.on('connection', function(socket) {
+                console.log('A client has connected');
+                
                 var col = db.collection('messages'),
                 sendStatus = function(s) {
                     socket.emit('status', s);
@@ -137,11 +139,11 @@ var SampleApp = function() {
                     if(whitespacePattern.test(name) || whitespacePattern.test(message)) {
                         sendStatus('Name and message is required.');
                     } else {
-                        col.insert({name: name, message: message}, function() {
-                      
+                        col.insert({name: name, message: message}, function(err, res) {
+
                             // Emit latest message to all clients
                             // Use client.emit instead of socket.emit
-                            self.client.emit('output', [data]);
+                            self.client.emit('output', res.ops);
 
                             sendStatus({
                                 message: "Message sent",

@@ -72,7 +72,7 @@
 				};
 
 				try {
-					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
+					var socket = io.connect('http://localhost:8080' || 'http://piechat-coaedi.rhcloud.com:8000/');
 				} catch(e) {
 					// Set status to warn user
 					console.log("Socket.io connection failed");
@@ -85,7 +85,7 @@
 					socket.on('output', function(data) {
 						// Check if data param is an array
 						if(data.length) {
-							console.log(data);
+
 							// Loop through results
 							for(var x = 0; x < data.length; x = x+ 1) {
 								var message = document.createElement('div');
@@ -95,15 +95,15 @@
 								content.setAttribute('class', 'message-content');
 								content.textContent = data[x].name + ': ' + data[x].message;
 
-								// var date = new Date(parseInt(data[x]._id.substring(0, 8), 16) * 1000);
+								var date = new Date(parseInt(data[x]._id.substring(0, 8), 16) * 1000);
 
-								// var time = document.createElement('div');
-								// time.setAttribute('class', 'message-time');
-								// time.textContent = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+								var time = document.createElement('div');
+								time.setAttribute('class', 'message-time');
+								time.textContent = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 
 								// Append
 								message.appendChild(content);
-								// message.appendChild(time);
+								message.appendChild(time);
 								
 								messages.appendChild(message);
 								messages.insertBefore(message, messages.firstChild);
