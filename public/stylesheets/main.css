@@ -31,7 +31,6 @@ input {
 
 .message-content {
 	width: 80%;
-	word-break: break-all;
 	float: left;
 }
 
