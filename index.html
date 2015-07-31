@@ -13,29 +13,29 @@
 		<meta property="og:locale" content="en_US">  
 	</head>
 	<body>
-		<script>
-		  window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '469932953183949',
-		      xfbml      : true,
-		      version    : 'v2.4'
-		    });
-		  };
+		// <script>
+		//   window.fbAsyncInit = function() {
+		//     FB.init({
+		//       appId      : '469932953183949',
+		//       xfbml      : true,
+		//       version    : 'v2.4'
+		//     });
+		//   };
 
-		  (function(d, s, id){
-		     var js, fjs = d.getElementsByTagName(s)[0];
-		     if (d.getElementById(id)) {return;}
-		     js = d.createElement(s); js.id = id;
-		     js.src = "//connect.facebook.net/en_US/sdk.js";
-		     fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
-		</script>
+		//   (function(d, s, id){
+		//      var js, fjs = d.getElementsByTagName(s)[0];
+		//      if (d.getElementById(id)) {return;}
+		//      js = d.createElement(s); js.id = id;
+		//      js.src = "//connect.facebook.net/en_US/sdk.js";
+		//      fjs.parentNode.insertBefore(js, fjs);
+		//    }(document, 'script', 'facebook-jssdk'));
+		// </script>
 
 		<div class="chat">
 			<input type="text" class="chat-name" placeholder="Enter your name">
 			<div class="chat-messages"></div>
 			<textarea placeholder="Type your message"></textarea>
-			<div class="chat-status">Status: <span>Zzz...</span></div>
+			<div class="chat-status">Status: <div>Zzz...</div></div>
 			<br>
 			<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
 		</div>	

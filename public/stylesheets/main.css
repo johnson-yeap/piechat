@@ -69,3 +69,21 @@ input {
 	padding: 10px;
 	bottom: 0;
 }
+
+.chat-status div {
+	width: 40px;
+    white-space:nowrap;
+    overflow:hidden;
+    -webkit-animation: type 5s steps(5, end) infinite;
+    animation: type 5s steps(5, end) infinite;
+}
+
+@keyframes type{
+    from { width: 0; }
+}
+
+@-webkit-keyframes type{
+    from { width: 0; }
+}
+
+
