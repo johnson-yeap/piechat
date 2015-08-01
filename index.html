@@ -49,7 +49,7 @@
 			&copy; sponavitus
 		</div>
 
-		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 
 		<script>
 			(function() {
@@ -84,10 +84,10 @@
 
 				try {
 					// 'http://localhost:8080' for dev
-					var socket = io.connect('http://localhost:8080/');
+					// var socket = io.connect('http://localhost:8080/');
 
 					// 'http://piechat-coaedi.rhcloud.com/' for production
-					// var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
+					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
 				} catch(e) {
 					// Set status to warn user
 					console.log("Socket.io connection failed");
