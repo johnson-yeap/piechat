@@ -15,6 +15,18 @@ input {
 	color: #4169E1;
 }
 
+.connected-users {
+	text-align: center;
+}
+
+.connected-users img {
+	height: 25px;
+}
+
+.connected-users .users-count {
+	color: #008000;
+}
+
 .chat-messages,
 .chat textarea,
 .chat-name {

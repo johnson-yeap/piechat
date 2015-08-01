@@ -117,12 +117,25 @@ var SampleApp = function() {
             console.log('Database connnected');
             
             self.client.on('connection', function(socket) {
+
+                var sendUsersCount = function() {
+                    var usersCount = self.client.sockets.length;
+                    self.client.emit('users_count', usersCount);
+                };
+
                 console.log('A client has connected');
-                
+                sendUsersCount();
+
+                socket.on('disconnect', function() {
+                    console.log('A client has disconnected');
+                    sendUsersCount();
+                });
+
                 var col = db.collection('messages'),
                 sendStatus = function(s) {
                     socket.emit('status', s);
                 };
+
                 // Emit all messages
                 col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
                     if(err) throw err;
