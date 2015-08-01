@@ -10,7 +10,9 @@
 		<meta property="og:image" content="http://piechat-coaedi.rhcloud.com/images/meet_your_neighbor.png">
 		<meta property="fb:app_id" content="469932953183949">
 		<meta property="og:type" content="website">
-		<meta property="og:locale" content="en_US">  
+		<meta property="og:locale" content="en_US"> 
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	</head>
 	<body>
 		<script>
@@ -30,6 +32,8 @@
 		     fjs.parentNode.insertBefore(js, fjs);
 		   }(document, 'script', 'facebook-jssdk'));
 		</script>
+
+		<div class="room-name"><h1>You've entered <span class="postal-code">#####</span> Hall</h1></div>
 
 		<div class="chat">
 			<input type="text" class="chat-name" placeholder="Enter your name">
@@ -57,6 +61,7 @@
 				messages = getNode('.chat-messages'),
 				chatname = getNode('.chat-name'),
 				status = getNode('.chat-status'),
+				postalcode = getNode('.postal-code'),
 
 				statusDefault = status.textContent,
 
@@ -71,8 +76,15 @@
 					}
 				};
 
+				$.get("http://ipinfo.io", function(response) {
+    				postalcode.textContent = response.postal;
+				}, "jsonp");
+
 				try {
 					// 'http://localhost:8080' for dev
+					// var socket = io.connect('http://localhost:8080/');
+
+					// 'http://piechat-coaedi.rhcloud.com/' for production
 					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
 				} catch(e) {
 					// Set status to warn user
