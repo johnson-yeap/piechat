@@ -12,7 +12,11 @@
 		<meta property="og:type" content="website">
 		<meta property="og:locale" content="en_US"> 
 
+		<!-- jQuery API -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<!-- Google Map API -->
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+		<script src="javascripts/googlemap-geolocation.js"></script>
 	</head>
 	<body>
 		<script>
@@ -35,6 +39,8 @@
 
 		<div class="room-name"><h1>You've entered <span class="postal-code">#####</span> Hall</h1></div>
 		<div class="connected-users"><h5>Connected users: <span class="users-count">0</span><img src="images/connected_users.png"></h5></div>
+
+		<div id="map-canvas"></div>
 
 		<div class="chat">
 			<input type="text" class="chat-name" placeholder="Enter your name">

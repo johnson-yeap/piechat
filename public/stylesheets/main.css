@@ -4,12 +4,6 @@ input {
 	font: 13px "Trebuchet MS", sans-serif;
 }
 
-.chat {
-	max-width: 400px;
-	margin: auto;
-	margin-top: 50px;
-}
-
 .room-name h1 {
 	text-align: center;
 	color: #4169E1;
@@ -25,6 +19,20 @@ input {
 
 .connected-users .users-count {
 	color: #008000;
+}
+
+#map-canvas {
+	background-color: #D3D3D3;
+	float: right;
+	height: 300px;
+	width: 300px;
+    margin: 80px 30px 0px 0px;
+    padding: 0;
+}
+
+.chat {
+	max-width: 400px;
+	margin: 50px auto auto auto;
 }
 
 .chat-messages,
