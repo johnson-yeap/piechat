@@ -46,14 +46,15 @@
 
 	if(socket !== undefined) {
 		// Listen for users' location
-		socket.on('users_location', function(pos) {
-			var latlong = new google.maps.LatLng(pos.latitude, pos.longitude);
-			var image = 'images/connected_users.png'
-		    var marker = new google.maps.Marker({
-		        position: latlong,
-		        map: map,
-		        icon: image
-		    });
+		socket.on('users_location', function(data) {
+			var latlong = new google.maps.LatLng(data.latitude, data.longitude);
+			var marker_id = data.id
+			addMarker(latlong, marker_id);
+		});
+
+		// Listen for remove_marker
+		socket.on('remove_marker', function(data) {
+			removeMarker(data);
 		});
 
 		// Listen for connected users count
@@ -117,6 +118,7 @@
 		// is probably because you have denied permission for location sharing.
 
 		var map;
+		var markers = [];
 
 		function initialize() {
 		  var mapOptions = {
@@ -134,7 +136,7 @@
 		      // Listen for user location
 		      socket.emit('user_location', {
 		      		latitude: position.coords.latitude,
-		      		longitude: position.coords.longitude
+		      		longitude: position.coords.longitude,
 		      });
 
 		      map.setCenter(pos);
@@ -144,6 +146,25 @@
 		  } else {
 		    // Browser doesn't support Geolocation
 		    handleNoGeolocation(false);
+		  }
+		}
+
+		function addMarker(location, marker_id) {
+		  var image = 'images/connected_users.png'
+		  var marker = new google.maps.Marker({
+		  	id: marker_id,
+		    position: location,
+		    map: map,
+		    icon: image
+		  });
+		  markers.push(marker);
+		}
+
+		function removeMarker(marker_id) {
+		  for(i = 0; i < markers.length; i++) {
+		  	if(markers[i].id === marker_id) {
+		  		markers[i].setMap(null);
+		  	}
 		  }
 		}
 

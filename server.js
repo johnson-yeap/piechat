@@ -133,6 +133,7 @@ var SampleApp = function() {
                 // Update users count once a client has disconnected.
                 socket.on('disconnect', function() {
                     console.log('A client has disconnected');
+                    self.client.emit('remove_marker', socket.conn.id);
                     sendUsersCount();
                 });
 
@@ -152,9 +153,10 @@ var SampleApp = function() {
                 /*  User location.                                                    */
                 /*  ================================================================  */ 
                 // Wait for user location
-                socket.on('user_location', function(data){
+                socket.on('user_location', function(location){
                     console.log('A client location has detected');
-                    self.client.emit('users_location', data);
+                    self.client.emit('users_location', {latitude: location.latitude, 
+                        longitude: location.longitude, id: socket.conn.id});
                 });
 
                 /*  ================================================================  */
