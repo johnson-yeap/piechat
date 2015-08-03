@@ -22,7 +22,6 @@ input {
 }
 
 #map-canvas {
-	background-color: #D3D3D3;
 	float: right;
 	height: 300px;
 	width: 300px;

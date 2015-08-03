@@ -143,6 +143,12 @@ var SampleApp = function() {
                     socket.emit('output', res);
                 });
 
+                // Wait for user location
+                socket.on('user_location', function(data){
+                    console.log('A client location has detected');
+                    self.client.emit('users_location', data);
+                });
+
                 // Wait for input
                 socket.on('input', function(data) {
                     var name = data.name,
