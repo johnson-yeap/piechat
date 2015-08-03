@@ -3,6 +3,7 @@
 	<head>
 		<title>PieChat</title>
 		<link rel='stylesheet' href='/stylesheets/main.css'>
+		<!-- Open Graph -->
 		<meta property="og:title" content="PieChat">
 		<meta property="og:site_name" content="Red Hat Cloud">
 		<meta property="og:url" content="http://piechat-coaedi.rhcloud.com/">
@@ -17,27 +18,16 @@
 		<!-- Google Map API -->
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 	</head>
+
 	<body>
-		<script>
-		  window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '469932953183949',
-		      xfbml      : true,
-		      version    : 'v2.4'
-		    });
-		  };
+		<script src="javascripts/fb-like-plugin.js"></script>
 
-		  (function(d, s, id){
-		     var js, fjs = d.getElementsByTagName(s)[0];
-		     if (d.getElementById(id)) {return;}
-		     js = d.createElement(s); js.id = id;
-		     js.src = "//connect.facebook.net/en_US/sdk.js";
-		     fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
-		</script>
-
-		<div class="room-name"><h1>You've entered <span class="postal-code">#####</span> Hall</h1></div>
-		<div class="connected-users"><h5>Connected users: <span class="users-count">0</span><img src="images/connected_users.png"></h5></div>
+		<div class="room-name">
+			<h1>You've entered <span class="postal-code">#####</span> Hall</h1>
+		</div>
+		<div class="connected-users">
+			<h5>Connected users: <span class="users-count">0</span><img src="images/connected_users.png"></h5>
+		</div>
 
 		<div id="map-canvas"></div>
 
@@ -47,6 +37,7 @@
 			<textarea placeholder="Type your message"></textarea>
 			<div class="chat-status">Status: <div>Zzz...</div></div>
 			<br>
+			<!-- Facebook Like Button -->
 			<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
 		</div>	
 
@@ -55,177 +46,6 @@
 		</div>
 
 		<script src="/socket.io/socket.io.js"></script>
-
-		<script>
-			(function() {
-
-				var getNode = function(s) {
-					return document.querySelector(s);
-				},
-
-				// Get required nodes
-				textarea = getNode('.chat textarea'),
-				messages = getNode('.chat-messages'),
-				chatname = getNode('.chat-name'),
-				status = getNode('.chat-status'),
-				postalcode = getNode('.postal-code'),
-				userscount = getNode('.users-count'),
-
-				statusDefault = status.textContent,
-
-				setStatus = function(s) {
-					status.textContent = s;
-
-					if(s !== statusDefault) {
-						var delay = setTimeout(function() {
-							setStatus(statusDefault);
-							clearInterval(delay);
-						}, 1000);
-					}
-				};
-
-				$.get("http://ipinfo.io", function(response) {
-    				postalcode.textContent = response.postal;
-				}, "jsonp");
-
-				try {
-					// 'http://localhost:8080' for dev
-					// var socket = io.connect('http://localhost:8080/');
-
-					// 'http://piechat-coaedi.rhcloud.com/' for production
-					var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
-				} catch(e) {
-					// Set status to warn user
-					console.log("Socket.io connection failed");
-
-				}
-
-				if(socket !== undefined) {
-
-					// Listen for users' location
-					socket.on('users_location', function(data) {
-						var latlong = new google.maps.LatLng(data.latitude, data.longitude);
-						var image = 'images/connected_users.png'
-					    var marker = new google.maps.Marker({
-					        position: latlong,
-					        map: map,
-					        icon: image
-					    });
-					});
-
-					// Listen for connected users
-					socket.on('users_count', function(data) {
-						userscount.textContent = data;
-					});
-
-					// Listen for output
-					socket.on('output', function(data) {
-						// Check if data param is an array
-						if(data.length) {
-
-							// Loop through results
-							for(var x = 0; x < data.length; x = x+ 1) {
-								var message = document.createElement('div');
-								message.setAttribute('class', 'chat-message');
-
-								var content = document.createElement('div');
-								content.setAttribute('class', 'message-content');
-								content.textContent = data[x].name + ': ' + data[x].message;
-
-								var date = new Date(parseInt(data[x]._id.substring(0, 8), 16) * 1000);
-
-								var time = document.createElement('div');
-								time.setAttribute('class', 'message-time');
-								time.textContent = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-
-								// Append
-								message.appendChild(content);
-								message.appendChild(time);
-								
-								messages.appendChild(message);
-								messages.insertBefore(message, messages.firstChild);
-							}
-						}
-					});
-
-					// Listen for a status
-					socket.on('status', function(data) {
-						setStatus((typeof data === 'object') ? data.message : data);
-
-						if(data.clear === true) {
-							textarea.value = '';
-						}
-						
-					});
-
-					// Listen for keydown
-					textarea.addEventListener('keydown', function(event) {
-						var self = this,
-							name = chatname.value;
-
-						if(event.which === 13 && event.shiftKey === false) {
-							socket.emit('input', {
-								name: name,
-								message: self.value
-							});
-						}
-					});
-
-					// Note: This example requires that you consent to location sharing when
-					// prompted by your browser. If you see a blank space instead of the map, this
-					// is probably because you have denied permission for location sharing.
-
-					var map;
-
-					function initialize() {
-					  var mapOptions = {
-					    zoom: 17
-					  };
-					  map = new google.maps.Map(document.getElementById('map-canvas'),
-					      mapOptions);
-
-					  // Try HTML5 geolocation
-					  if(navigator.geolocation) {
-					    navigator.geolocation.getCurrentPosition(function(position) {
-					      var pos = new google.maps.LatLng(position.coords.latitude,
-					                                       position.coords.longitude);
-
-					      // Listen for user location
-					      socket.emit('user_location', {
-					      		latitude: position.coords.latitude,
-					      		longitude: position.coords.longitude
-					      });
-
-					      map.setCenter(pos);
-					    }, function() {
-					      handleNoGeolocation(true);
-					    });
-					  } else {
-					    // Browser doesn't support Geolocation
-					    handleNoGeolocation(false);
-					  }
-					}
-
-					function handleNoGeolocation(errorFlag) {
-					  if (errorFlag) {
-					    var content = 'Error: The Geolocation service failed.';
-					  } else {
-					    var content = 'Error: Your browser doesn\'t support geolocation.';
-					  }
-
-					  var options = {
-					    map: map,
-					    position: new google.maps.LatLng(60, 105),
-					    content: content
-					  };
-
-					  var infowindow = new google.maps.InfoWindow(options);
-					  map.setCenter(options.position);
-					}
-
-					google.maps.event.addDomListener(window, 'load', initialize);
-				}
-			})();
-		</script>
+		<script src="javascripts/socket.js"></script>
 	</body>
 </html>

@@ -117,24 +117,29 @@ var SampleApp = function() {
             console.log('Database connnected');
             
             self.client.on('connection', function(socket) {
+                console.log('A client has connected');
 
+                /*  ================================================================  */
+                /*  Users count.                                                      */
+                /*  ================================================================  */
                 var sendUsersCount = function() {
                     var usersCount = self.client.sockets.length;
                     self.client.emit('users_count', usersCount);
                 };
-
-                console.log('A client has connected');
+                
+                // Update users count once a client has connected.
                 sendUsersCount();
 
+                // Update users count once a client has disconnected.
                 socket.on('disconnect', function() {
                     console.log('A client has disconnected');
                     sendUsersCount();
                 });
 
-                var col = db.collection('messages'),
-                sendStatus = function(s) {
-                    socket.emit('status', s);
-                };
+                /*  ================================================================  */
+                /*  Previous messages.                                                */
+                /*  ================================================================  */
+                var col = db.collection('messages');
 
                 // Emit all messages
                 col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
@@ -143,11 +148,21 @@ var SampleApp = function() {
                     socket.emit('output', res);
                 });
 
+                /*  ================================================================  */
+                /*  User location.                                                    */
+                /*  ================================================================  */ 
                 // Wait for user location
                 socket.on('user_location', function(data){
                     console.log('A client location has detected');
                     self.client.emit('users_location', data);
                 });
+
+                /*  ================================================================  */
+                /*  User input.                                                       */
+                /*  ================================================================  */ 
+                var sendStatus = function(s) {
+                    socket.emit('status', s);
+                };
 
                 // Wait for input
                 socket.on('input', function(data) {
@@ -159,7 +174,6 @@ var SampleApp = function() {
                         sendStatus('Name and message is required.');
                     } else {
                         col.insert({name: name, message: message}, function(err, res) {
-
                             // Emit latest message to all clients
                             // Use client.emit instead of socket.emit
                             self.client.emit('output', res.ops);
@@ -174,7 +188,6 @@ var SampleApp = function() {
             });
         }); 
     };
-    
 
     /**
      *  Create the routing table entries + handlers for the application.
