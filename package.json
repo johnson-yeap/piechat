@@ -1,7 +1,7 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "PieChat",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "A Real Time Chat Application.",
   "keywords": [
     "OpenShift",
     "Node.js",
