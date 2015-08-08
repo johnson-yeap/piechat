@@ -26,7 +26,7 @@ module.exports = function(app, passport) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/chat', // redirect to the secure chat section
+        successRedirect : '/login', // redirect to the secure chat section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -94,7 +94,7 @@ module.exports = function(app, passport) {
 
     // the callback after google has authenticated the user
     app.get('/auth/google/callback', passport.authenticate('google', {
-        successRedirect : '/chat',
+        successRedirect : '/login',
         failureRedirect : '/'
     }));
 
@@ -116,7 +116,7 @@ module.exports = function(app, passport) {
     });
 
     app.post('/connect/local', passport.authenticate('local-signup', {
-        successRedirect : '/chat', // redirect to the secure chat section
+        successRedirect : '/login', // redirect to the secure chat section
         failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -128,7 +128,7 @@ module.exports = function(app, passport) {
 
     // handle the callback after facebook has authorized the user
     app.get('/connect/facebook/callback', passport.authorize('facebook', {
-        successRedirect : '/chat',
+        successRedirect : '/login',
         failureRedirect : '/'
     }));
 
@@ -139,7 +139,7 @@ module.exports = function(app, passport) {
 
     // handle the callback after twitter has authorized the user
     app.get('/connect/twitter/callback', passport.authorize('twitter', {
-        successRedirect : '/chat',
+        successRedirect : '/login',
         failureRedirect : '/'
     }));
 
@@ -150,7 +150,7 @@ module.exports = function(app, passport) {
 
     // the callback after google has authorized the user
     app.get('/connect/google/callback', passport.authorize('google', {
-        successRedirect : '/chat',
+        successRedirect : '/login',
         failureRedirect : '/'
     }));
 };
