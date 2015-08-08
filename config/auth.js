@@ -8,9 +8,9 @@ module.exports = {
     },
 
     'twitterAuth' : {
-        'consumerKey'       : 'LOclVZfOvMaLeQBjHK8G5wAlK',
-        'consumerSecret'    : 'fnacivmhbdGKFX6KIR6wM16Q2kapM6e0jnPX414ASA6S0edrPj',
-        'callbackURL'       : 'http://localhost:8080/auth/twitter/callback'
+        'consumerKey'       : 'gwcUZA6zrDZ09CDFeks0skJ2v',
+        'consumerSecret'    : '0mPYguAmakn3MxHH74g50cSBl4URB35DgReM2ieCl37Haryyn5',
+        'callbackURL'       : 'http://piechat-coaedi.rhcloud.com:8080/auth/twitter/callback'
     },
 
     'googleAuth' : {
