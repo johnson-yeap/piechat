@@ -10,7 +10,7 @@ module.exports = {
     'twitterAuth' : {
         'consumerKey'       : 'gwcUZA6zrDZ09CDFeks0skJ2v',
         'consumerSecret'    : '0mPYguAmakn3MxHH74g50cSBl4URB35DgReM2ieCl37Haryyn5',
-        'callbackURL'       : 'http://piechat-coaedi.rhcloud.com:8080/auth/twitter/callback'
+        'callbackURL'       : 'http://piechat-coaedi.rhcloud.com/auth/twitter/callback'
     },
 
     'googleAuth' : {
