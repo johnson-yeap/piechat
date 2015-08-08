@@ -1,12 +1,12 @@
 // app/routes.js
 module.exports = function(app, passport) {
-
+    var appName = app.settings.name;
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
         res.render('index.ejs', {
-            title: app.settings.name,
+            title: appName,
         }); // load the index.ejs file
     });
 
@@ -17,7 +17,11 @@ module.exports = function(app, passport) {
     app.get('/login', function(req, res) {
 
         // render the page and pass in any flash data if it exists
-        res.render('login.ejs', { message: req.flash('loginMessage'), flash_type: req.flash('type') }); 
+        res.render('login.ejs', {
+            title: appName + " - Login", 
+            message: req.flash('loginMessage'),
+            flash_type: req.flash('type') 
+        }); 
     });
 
     // process the login form

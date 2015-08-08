@@ -1,53 +1,50 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>PieChat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> <!-- load fontawesome -->
+<html lang="en">
 
+<head>
+    <% include partials/_head %>
+
+    <title><%= title %></title>
     <!-- Custom CSS -->
     <link href="stylesheets/theme.css" rel="stylesheet">
 </head>
+
 <body>
-<div class="container">
+    <div class="container">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h1 class="text-center"><span class="fa fa-sign-in"></span> Login</h1>
+            <hr class="colorgraph">
 
-<div class="col-sm-6 col-sm-offset-3">
+            <!-- show any messages that come back with authentication -->
+            <% if (message.length > 0) { %>
+                <div class="alert alert-<%- flash_type %>"><%= message %></div>
+            <% } %>
 
-    <h1 class="text-center"><span class="fa fa-sign-in"></span> Login</h1>
-    <hr class="colorgraph">
+            <form action="/login" method="post">
+                <div class="form-group required-field">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="email" placeholder="youremail@example.com" required>
+                </div>
+                <div class="form-group required-field">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="password" required>
+                </div>
 
-    <!-- show any messages that come back with authentication -->
-    <% if (message.length > 0) { %>
-        <div class="alert alert-<%- flash_type %>"><%= message %></div>
-    <% } %>
+                <button type="submit" class="btn btn-warning">Login</button>
+            </form>
 
-    <!-- LOGIN FORM -->
-    <form action="/login" method="post">
-        <div class="form-group required-field">
-            <label>Email</label>
-            <input type="text" class="form-control" name="email" placeholder="youremail@example.com" required>
+            <div class="text-right">
+                <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span><span class="hidden-xs hidden-sm"> Facebook</span></a>
+                <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span><span class="hidden-xs hidden-sm"> Twitter</span></a>
+                <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span><span class="hidden-xs hidden-sm"> Google</span></a>
+            </div>
+
+            <hr>
+
+            <p class="text-center">New user? <a href="/signup">Signup here.</a></p>
+            <p><a href="/"><span class="fa fa-arrow-circle-o-left fa-2x"></span> Home page.</a></p>
         </div>
-        <div class="form-group required-field">
-            <label>Password</label>
-            <input type="password" class="form-control" name="password" required>
-        </div>
-
-        <button type="submit" class="btn btn-warning">Login</button>
-    </form>
-
-    <div class="text-right">
-        <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span><span class="hidden-xs hidden-sm"> Facebook</span></a>
-        <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span><span class="hidden-xs hidden-sm"> Twitter</span></a>
-        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span><span class="hidden-xs hidden-sm"> Google</span></a>
-    </div>
-
-    <hr>
-
-    <p class="text-center">New user? <a href="/signup">Signup here.</a></p>
-    <p><a href="/"><span class="fa fa-arrow-circle-o-left fa-2x"></span> Home page.</a></p>
-
-</div>
-
-</div>
+    </div> <!-- /.container -->
 </body>
+
 </html>
