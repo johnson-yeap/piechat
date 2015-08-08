@@ -4,7 +4,7 @@ module.exports = {
     'facebookAuth' : {
         'clientID'      : '469932953183949', // your App ID
         'clientSecret'  : 'c9bbb318052185dfacfec7edf28da49f', // your App Secret
-        'callbackURL'   : 'http://piechat-coaedi.rhcloud.com//auth/facebook/callback'
+        'callbackURL'   : 'http://piechat-coaedi.rhcloud.com/auth/facebook/callback'
     },
 
     'twitterAuth' : {
