@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include _head %>
+        <title>PieChat</title>
+        
+        <link rel='stylesheet' href='/stylesheets/main.css'>
+         
+
+        <!-- jQuery API -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- Google Map API -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    </head>
+
+    <body>
+        <script src="javascripts/fb-like-plugin.js"></script>
+
+        <div class="room-name">
+            <h1>You've entered <span class="postal-code">#####</span> Hall</h1>
+        </div>
+        <div class="connected-users">
+            <h5>Connected users: <span class="users-count">0</span><img src="images/connected_users.png"></h5>
+        </div>
+
+        <div id="map-canvas"></div>
+
+        <div class="chat">
+            <input type="text" class="chat-name" placeholder="Enter your name">
+            <div class="chat-messages"></div>
+            <textarea placeholder="Type your message"></textarea>
+            <div class="chat-status">Status: <div>Zzz...</div></div>
+            <br>
+            <!-- Facebook Like Button -->
+            <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        </div>  
+
+        <div class="signature">
+            &copy; sponavitus
+        </div>
+
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <script src="javascripts/socket.js"></script>
+    </body>
+</html>

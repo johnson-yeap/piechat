@@ -35,10 +35,10 @@
 
 	try {
 		// Development env
-		// var socket = io.connect('http://localhost:8080/');
+		var socket = io.connect('http://localhost:8080/');
 
 		// Production env
-		var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
+		// var socket = io.connect('http://piechat-coaedi.rhcloud.com:8000/');
 	} catch(e) {
 		// Set status to warn user
 		console.log("Socket.io connection failed");

@@ -4,24 +4,22 @@ var express         = require('express');
 var fs              = require('fs');
 var path            = require('path');
 var favicon         = require('serve-favicon');
-var logger          = require('morgan');
+var morgan          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var mongoClient     = require('mongodb').MongoClient;
 var http            = require('http');
 var io              = require('socket.io');
+var mongoose        = require('mongoose');
+var passport        = require('passport');
+var flash           = require('connect-flash');
+var session         = require('express-session');
+var pjson           = require('./package.json');
 
+var configDB        = require('./config/database.js');
+require('./config/passport.js')(passport); // pass passport for configuration
 
-// Default to a 'localhost' configuration:
-var mongodb_connection_string = "mongodb://127.0.0.1:27017/piechat";
-// If OPENSHIFT env variables are present, use the available connection info:
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-    mongodb_connection_string = "mongodb://" + process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-    process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-    process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-    process.env.OPENSHIFT_APP_NAME;
-}
+mongoose.connect(configDB.url); // connect to the database
 
 /**
  *  Define the sample application.
@@ -112,7 +110,7 @@ var SampleApp = function() {
      *  Establish mongodb connection
      */
     self.connectMongoDB = function() {
-        mongoClient.connect(mongodb_connection_string, function(err, db) {
+        mongoClient.connect(configDB.url, function(err, db) {
             if(err) throw err;
             console.log('Database connnected');
             
@@ -195,17 +193,30 @@ var SampleApp = function() {
      *  Create the routing table entries + handlers for the application.
      */
     self.createRoutes = function() {
-        self.routes = { };
+        require('./routes.js')(self.app, passport); // load our routes and pass in our app and fully configured passport
+        
+        // self.routes = { };
+        // self.routes['/asciimo'] = function(req, res) {
+        //     var link = "http://i.imgur.com/kmbjB.png";
+        //     res.send("<html><body><img src='" + link + "'></body></html>");
+        // };
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
+        // self.routes['/'] = function(req, res) {
+        //     res.setHeader('Content-Type', 'text/html');
+        //     res.send(self.cache_get('index.html') );
+        // };
 
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
-        };
+        // self.routes['/'] = function(req, res) {
+        //     res.render('index.ejs');
+        // };
+
+        // self.routes['/login'] = function(req, res) {
+        //     res.render('login.ejs');
+        // };
+
+        // self.routes['/signup'] = function(req, res) {
+        //     res.render('signup.ejs');
+        // };
     };
 
 
@@ -214,7 +225,6 @@ var SampleApp = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
-        self.createRoutes();
         self.app = express();
 
         //  Add handlers for the app (from the routes).
@@ -222,17 +232,27 @@ var SampleApp = function() {
             self.app.get(r, self.routes[r]);
         }
 
+        // settings 
+        self.app.set('name', pjson.name);
+        
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
         self.app.set('view engine', 'ejs');
 
         // uncomment after placing your favicon in /public
         self.app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-        self.app.use(logger('dev'));
+        self.app.use(morgan('dev'));
         self.app.use(bodyParser.json());
         self.app.use(bodyParser.urlencoded({ extended: false }));
         self.app.use(cookieParser());
         self.app.use(express.static(path.join(__dirname, 'public')));
+        
+        self.app.use(session({ secret: 'piechat' }));
+        self.app.use(passport.initialize());
+        self.app.use(passport.session()); // persistent login sessions.
+        self.app.use(flash()); // use connect-flash for flash messages stored in session.
+        
+        self.createRoutes();
     };
 
     
